@@ -24,10 +24,5 @@ namespace StickHero.Scripts.Game
             var bounds = boxCollider.bounds;
             return new Vector2(bounds.max.x , bounds.max.y);
         }
-
-        private void Update()
-        {
-            Debug.Log(GetTopRightPosition());
-        }
     }
 }

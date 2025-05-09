@@ -1,7 +1,7 @@
-using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace StickHero.Scripts.Game
 {
@@ -9,8 +9,9 @@ namespace StickHero.Scripts.Game
     {
         [SerializeField] private Hero hero;
         [SerializeField] private Stick stick;
+        [SerializeField] private ScoreLabel scoreLabel;
+        [SerializeField] private GameOver gameOver;
         [SerializeField] private PlatformsGenerator platformsGenerator;
-        //[SerializeField] private Transform rootPlatforms;
         
         [SerializeField] Transform cameraTransform;
 
@@ -18,28 +19,39 @@ namespace StickHero.Scripts.Game
         [SerializeField] private float movingDuration = 1.0f;
         [SerializeField] private float movingCameraDuration = 1.0f;
         
+        private bool _isGameOver;
+        
         private int _currentPlatform;
         private Platform[] _platforms;
 
         private void Start()
         {
-           // _platforms = rootPlatforms.GetComponentsInChildren<Platform>();
+            hero.SavePosition();
+            
+            gameOver.OnRestart = Restart;
             StartGame();
+        }
+
+        private void Restart()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void StartGame()
         {
+            gameOver.Hide();
+            scoreLabel.ResetScore();
+            
             _currentPlatform = 0;
             stick.OnCompleteDropStick = OnCompleteDropStick;
             var newPlatforms = platformsGenerator.CreatePlatforms();
             _platforms = newPlatforms.ToArray();
-            
             SetHeroStart(_platforms[_currentPlatform]);
         }
 
         private async void SetHeroStart(Platform platform)
         {
-            await UniTask.Yield();
+            await UniTask.DelayFrame(3);
             
             var edgePoint = platform.GetTopRightPosition();
             hero.transform.position = new Vector3(edgePoint.x - heroOffsetByEdge, 
@@ -52,28 +64,45 @@ namespace StickHero.Scripts.Game
 
         private void OnCompleteDropStick(float distance)
         {
-            var startPoint = _platforms[_currentPlatform].GetTopRightPosition();
-            var endPointMoving = startPoint.x + distance;
-            
-            var nextPlatform = _platforms[_currentPlatform + 1];
-            var leftPoint = nextPlatform.GetTopLeftPosition();
-            var rightPoint = nextPlatform.GetTopRightPosition();
+            var startPointMoving = _platforms[_currentPlatform].GetTopRightPosition();
+            var endPointMoving = startPointMoving.x + distance;
 
-            if (endPointMoving > leftPoint.x && 
-                endPointMoving < rightPoint.x)
+            var targetMovePlatform = FindStickPlatform(endPointMoving);
+            if (targetMovePlatform != null)
             {
-                Debug.Log("Ok");
-                HeroMoving(endPointMoving , nextPlatform);
-                _currentPlatform++;
+                scoreLabel.AddScore((int)distance);
             }
-            else
-            {
-                Debug.Log("EndLevel");
-                HeroMoving(endPointMoving , null);
-            }
+            HeroMovingToPlatform(endPointMoving , targetMovePlatform);
         }
 
-        private async void HeroMoving(float endPointMoving , Platform platform)
+        private Platform FindStickPlatform(float endPointMoving)
+        {
+            Platform nextPlatform = null;
+            var offsetNextPlatform = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if(_currentPlatform + i >= _platforms.Length)
+                    break;
+                
+                var platform = _platforms[_currentPlatform + i];
+                var leftPoint = platform.GetTopLeftPosition();
+                var rightPoint = platform.GetTopRightPosition();
+
+                if (endPointMoving > leftPoint.x && 
+                    endPointMoving < rightPoint.x)
+                {
+                    Debug.Log("Ok");
+                    nextPlatform = platform;
+                    offsetNextPlatform = i;
+                    break;
+                }
+            }
+            
+            _currentPlatform += offsetNextPlatform;
+            return nextPlatform;
+        }
+
+        private async void HeroMovingToPlatform(float endPointMoving , Platform platform)
         {
             if (platform != null)
             {
@@ -83,10 +112,13 @@ namespace StickHero.Scripts.Game
                 
                 SetHeroStart(platform);
             }
+            //Game over
             else
             {
                 await hero.transform.DOMoveX(endPointMoving, movingDuration);
                 await hero.transform.DOMoveY( hero.transform.position.y - 10.0f, movingDuration);
+                
+                gameOver.Show();
             }
         }
 
@@ -94,19 +126,6 @@ namespace StickHero.Scripts.Game
         {
             var pointMoving = platform.GetTopLeftPosition();
             await cameraTransform.transform.DOMoveX(pointMoving.x, movingDuration);
-        }
-        
-        private void OnDrawGizmos()
-        {
-            if(_platforms == null || _platforms.Length == 0)
-                return;
-            
-            var nextPlatform = _platforms[_currentPlatform + 1];
-            var leftPoint = nextPlatform.GetTopLeftPosition();
-            var rightPoint = nextPlatform.GetTopRightPosition();
-            
-            Gizmos.DrawSphere(leftPoint , 0.5f);
-            Gizmos.DrawSphere(rightPoint , 0.5f);
         }
     }
 }

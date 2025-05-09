@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sh_bg_island_0: 8295229663376371537
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

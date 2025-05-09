@@ -7,48 +7,61 @@ namespace StickHero.Scripts.Game
     {
         [SerializeField] private int maxCountPlatforms = 20;
         [SerializeField] private float chanceChangeByDistance = 1.0f;
-        
         [SerializeField] private Transform rootPlatforms;
         [SerializeField] private Platform[] platformPrefabs;
 
-        private List<Platform> Platforms { get; set; } = new();
-        
+        private readonly List<Platform> platforms = new();
+
         public List<Platform> CreatePlatforms()
         {
-            RemoveOldPlatforms();
-            Platforms.Clear();
-            
+            ClearPlatforms();
             float lastPos = 0;
-            
+            int lastIndex = -1;
+
             for (int i = 0; i < maxCountPlatforms; i++)
             {
-                var index = Random.Range(0 , platformPrefabs.Length);
+                int index = GetRandomPlatformIndex(lastIndex, i == 0);
+                lastIndex = index;
 
-                if (i == 0)
-                    index = 0;
-                
-                var platformPrefab = platformPrefabs[index];
-                
-                var newPlatform = Instantiate(platformPrefab, rootPlatforms);
-                newPlatform.name = $"{i} - {newPlatform.name}";
-                newPlatform.transform.rotation = Quaternion.identity;
-                newPlatform.transform.localPosition = new Vector3(lastPos, 0, 0);
+                var newPlatform = InstantiatePlatform(platformPrefabs[index], i, lastPos);
+                lastPos += platformPrefabs[index].GetSize() + 10.0f;
 
-                lastPos += platformPrefab.GetSize() + 10.0f;
-                
-                Platforms.Add(newPlatform);
+                platforms.Add(newPlatform);
             }
 
-            return Platforms;
+            return platforms;
         }
 
-        private void RemoveOldPlatforms()
+        private void ClearPlatforms()
         {
-            var lastPlatforms = rootPlatforms.GetComponentsInChildren<Platform>();
-            foreach (var platform in lastPlatforms)
+            foreach (var platform in rootPlatforms.GetComponentsInChildren<Platform>())
             {
                 DestroyImmediate(platform.gameObject);
             }
+
+            platforms.Clear();
+        }
+
+        private int GetRandomPlatformIndex(int lastIndex, bool isFirstPlatform)
+        {
+            if (isFirstPlatform) return 0;
+
+            int index;
+            do
+            {
+                index = Random.Range(0, platformPrefabs.Length);
+            } while (index == lastIndex);
+
+            return index;
+        }
+
+        private Platform InstantiatePlatform(Platform prefab, int index, float position)
+        {
+            var newPlatform = Instantiate(prefab, rootPlatforms);
+            newPlatform.name = $"{index} - {prefab.name}";
+            newPlatform.transform.rotation = Quaternion.identity;
+            newPlatform.transform.localPosition = new Vector3(position, 0, 0);
+            return newPlatform;
         }
     }
 }

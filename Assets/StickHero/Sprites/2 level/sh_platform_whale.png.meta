@@ -248,7 +248,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      sh_platform_whale_0: -7166846425998986018
+      sh_platform_whale_1: -4059618276462248696
+      sh_platform_whale_2: 9001153571467243265
+      sh_platform_whale_3: -9191527012736223004
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
