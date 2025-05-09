@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace StickHero.Scripts.Game
@@ -6,11 +5,9 @@ namespace StickHero.Scripts.Game
     [ExecuteAlways]
     public class FixCameraWidth : MonoBehaviour
     {
-        [SerializeField] private float desiredWidth = 32f;
-        [SerializeField] private float offestY = 1.0f;
+        [SerializeField] private float desired = 32f;
         [SerializeField] private Camera camera;
-        [SerializeField] private Vector3 startPosition;
-
+        
         private int _lastScreenWidth;
         private int _lastScreenHeight;
         private float _lastDesiredWidth;
@@ -22,14 +19,14 @@ namespace StickHero.Scripts.Game
             
             if(_lastScreenWidth == Screen.width && 
                _lastScreenHeight == Screen.height && 
-               Mathf.Approximately(_lastDesiredWidth, desiredWidth))
+               Mathf.Approximately(_lastDesiredWidth, desired))
                 return;
 
-            _lastDesiredWidth = desiredWidth;
+            _lastDesiredWidth = desired;
             _lastScreenWidth = Screen.width;
             _lastScreenHeight = Screen.height;
             
-            var desiredHorizontalSize = desiredWidth / 2f;
+            var desiredHorizontalSize = desired / 2f;
             var aspectRatio = (float)Screen.width / Screen.height;
             camera.orthographicSize = desiredHorizontalSize / aspectRatio;
         }

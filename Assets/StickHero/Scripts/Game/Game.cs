@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,8 +13,8 @@ namespace StickHero.Scripts.Game
         [SerializeField] private ScoreLabel scoreLabel;
         [SerializeField] private GameOver gameOver;
         [SerializeField] private PlatformsGenerator platformsGenerator;
-        
-        [SerializeField] Transform cameraTransform;
+        [SerializeField] private CinemachineCamera cinemachineCamera;
+       // [SerializeField] Transform cameraTransform;
 
         [SerializeField] private float heroOffsetByEdge = 1.0f;
         [SerializeField] private float movingDuration = 1.0f;
@@ -115,6 +116,7 @@ namespace StickHero.Scripts.Game
             //Game over
             else
             {
+                cinemachineCamera.enabled = false;
                 await hero.transform.DOMoveX(endPointMoving, movingDuration);
                 await hero.transform.DOMoveY( hero.transform.position.y - 10.0f, movingDuration);
                 
@@ -124,8 +126,10 @@ namespace StickHero.Scripts.Game
 
         private async UniTask MovingCameraToPlatform(Platform platform)
         {
+            /*
             var pointMoving = platform.GetTopLeftPosition();
             await cameraTransform.transform.DOMoveX(pointMoving.x, movingDuration);
+            */
         }
     }
 }
