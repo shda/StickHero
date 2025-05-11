@@ -90,3 +90,6 @@ Recordings/*
 Assets/Packages/
 Build/
 .utmp/
+
+
+sftp_upload.txt
