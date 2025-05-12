@@ -27,8 +27,6 @@ namespace StickHero.Scripts.Game
 
         private void Start()
         {
-            hero.SavePosition();
-            
             gameOver.OnRestart = Restart;
             StartGame();
         }
@@ -40,11 +38,20 @@ namespace StickHero.Scripts.Game
 
         private void StartGame()
         {
+            hero.SetIdle();
             gameOver.Hide();
             scoreLabel.ResetScore();
             
             _currentPlatform = 0;
             stick.OnCompleteDropStick = OnCompleteDropStick;
+            stick.OnStickResize = () =>
+            {
+                hero.SetUpStickAnimation();
+            };
+            stick.OnStickComplete = () =>
+            {
+                hero.SetIdle();
+            };
             var newPlatforms = platformsGenerator.CreatePlatforms();
             _platforms = newPlatforms.ToArray();
             SetHeroStart(_platforms[_currentPlatform]);
@@ -107,6 +114,8 @@ namespace StickHero.Scripts.Game
         {
             if (platform != null)
             {
+                hero.SetMoving();
+                
                 var nextPoint = platform.GetTopRightPosition();
                 await hero.transform.DOMoveX(nextPoint.x - heroOffsetByEdge, movingDuration);
                 await MovingCameraToPlatform(platform);
@@ -118,10 +127,14 @@ namespace StickHero.Scripts.Game
             {
                 cinemachineCamera.enabled = false;
                 await hero.transform.DOMoveX(endPointMoving, movingDuration);
+                
+                hero.SetFall();
                 await hero.transform.DOMoveY( hero.transform.position.y - 10.0f, movingDuration);
                 
                 gameOver.Show();
             }
+            
+            hero.SetIdle();
         }
 
         private async UniTask MovingCameraToPlatform(Platform platform)

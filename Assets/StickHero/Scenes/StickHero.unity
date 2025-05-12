@@ -284,6 +284,38 @@ MonoBehaviour:
   maxSize: 20
   minSize: 2
   durationToRotation: 0.5
+--- !u!1 &38754965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 38754966}
+  m_Layer: 0
+  m_Name: Arms
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &38754966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38754965}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1777555826}
+  m_Father: {fileID: 925983695}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &84600349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -643,7 +675,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.323826, y: 3.37, z: -10}
+  m_LocalPosition: {x: 2.2991676, y: 3.37, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -883,6 +915,7 @@ GameObject:
   - component: {fileID: 925983695}
   - component: {fileID: 925983696}
   - component: {fileID: 925983694}
+  - component: {fileID: 925983697}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -910,14 +943,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925983693}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0, w: 1}
   m_LocalPosition: {x: -13.44, y: -4.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 13612895}
   - {fileID: 1064603820}
-  - {fileID: 1777555826}
+  - {fileID: 38754966}
   m_Father: {fileID: 1021088642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &925983696
@@ -932,6 +965,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1c87e5381948e38a5eb9bb516d1546, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 925983697}
+--- !u!95 &925983697
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925983693}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dd04ec79065a6ea4c9efd472f7b11899, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &962604075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1169,8 +1225,8 @@ MonoBehaviour:
   gameOver: {fileID: 964818811}
   platformsGenerator: {fileID: 1393244075}
   cinemachineCamera: {fileID: 1228785077}
-  heroOffsetByEdge: 0.8
-  movingDuration: 0.5
+  heroOffsetByEdge: 0.9
+  movingDuration: 1
   movingCameraDuration: 0.3
 --- !u!114 &1021088644
 MonoBehaviour:
@@ -1378,7 +1434,7 @@ Transform:
   m_GameObject: {fileID: 1228785074}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.323826, y: 3.37, z: -10}
+  m_LocalPosition: {x: 2.2991676, y: 3.37, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6673,11 +6729,11 @@ Transform:
   m_GameObject: {fileID: 1777555825}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.447, y: 0, z: 0}
+  m_LocalPosition: {x: 0.44699955, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 925983695}
+  m_Father: {fileID: 38754966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1777555827
 SpriteRenderer:
@@ -6733,7 +6789,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!1 &1839491823
 GameObject:
   m_ObjectHideFlags: 0

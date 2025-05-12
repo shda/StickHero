@@ -14,6 +14,8 @@ namespace StickHero.Scripts.Game
         [SerializeField] private float durationToRotation = 1.0f;
 
         public Action<float> OnCompleteDropStick;
+        public Action OnStickResize;
+        public Action OnStickComplete;
         
         private StickStage _stage = StickStage.None;
         private float _currentTimeRotation = 0;
@@ -29,16 +31,19 @@ namespace StickHero.Scripts.Game
                     if (IsStartSize())
                     {
                         _stage = StickStage.Resize;
+                        OnStickResize?.Invoke();
                     }
                     break;
                 case StickStage.Resize:
                     if (IsStopSize())
                     {
                         _stage = StickStage.Rotate;
+                        OnStickComplete?.Invoke();
                         return;
                     }
                     var newSize = stickRenderer.size.y + speedSize * Time.deltaTime;
                     stickRenderer.size = new Vector2(stickRenderer.size.x, Math.Clamp(newSize , minSize, maxSize));
+                   
                     break;
                 case StickStage.Rotate:
                     _currentTimeRotation += Time.deltaTime;
@@ -47,6 +52,7 @@ namespace StickHero.Scripts.Game
                     if (_currentTimeRotation > durationToRotation)
                     {
                         _stage = StickStage.Complete;
+                        
                     }
                     break;
                 case StickStage.Complete:
