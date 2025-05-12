@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 namespace StickHero.Scripts.Game
@@ -75,6 +76,9 @@ namespace StickHero.Scripts.Game
 
         private bool IsStartSize()
         {
+            if (EventSystem.current.IsPointerOverGameObject())
+                return false;
+            
             return Input.GetMouseButtonDown(0);
         }
 

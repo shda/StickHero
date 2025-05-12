@@ -280,9 +280,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stickRenderer: {fileID: 895573185}
-  speedSize: 10
-  maxSize: 20
-  minSize: 2
+  speedChangeStickSize: 10
+  maxStickSize: 20
+  minStickSize: 2
   durationToRotation: 0.5
 --- !u!1 &38754965
 GameObject:
@@ -1907,8 +1907,7 @@ MonoBehaviour:
   gameOverMenu: {fileID: 964818811}
   cinemachineCamera: {fileID: 1228785077}
   heroOffsetByEdge: 0.9
-  movingDuration: 1
-  movingCameraDuration: 0.3
+  heroMovingDuration: 1
   levels:
   - {fileID: 1082113612}
   - {fileID: 296930362}
@@ -2312,14 +2311,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a23cf188d14c30bf702dc7e74ebeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCountPlatforms: 100
+  maxCountPlatforms: 200
   chanceChangeByDistance: 1
   rootPlatforms: {fileID: 1103447581}
   platformPrefabs:
-  - {fileID: 3511985398022383613, guid: 4504e8ba6343ac14f858b72761b9647f, type: 3}
-  - {fileID: 964970538399510314, guid: bc8053ae6136b094aa3834078ee6840a, type: 3}
-  - {fileID: 4389230894980515063, guid: 794d65da37aed1d4abc14c2640bfbce0, type: 3}
-  - {fileID: 389389118240968918, guid: eb79cf976c4a2f84fbf5845a7a81decd, type: 3}
+  - {fileID: 7083993079593346979, guid: 1df6da9b750adb94fbcdb3d4f2339fd0, type: 3}
+  - {fileID: 1359044715702857289, guid: d09594938382ffd49952a71f106af914, type: 3}
+  - {fileID: 9148151240024002392, guid: 2985362c81d6e144b86abf7afd0ae0a8, type: 3}
+  - {fileID: 2577627500359536854, guid: 188e9cff756cf6d4caea9868c9a6a1b2, type: 3}
+  - {fileID: 7715019556068730666, guid: e23b88d932b6dd145b7a2a7b1e16700a, type: 3}
 --- !u!4 &1103447581
 Transform:
   m_ObjectHideFlags: 0
@@ -7752,7 +7752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a23cf188d14c30bf702dc7e74ebeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCountPlatforms: 100
+  maxCountPlatforms: 200
   chanceChangeByDistance: 1
   rootPlatforms: {fileID: 1393244076}
   platformPrefabs:
@@ -8006,7 +8006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47a23cf188d14c30bf702dc7e74ebeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCountPlatforms: 100
+  maxCountPlatforms: 200
   chanceChangeByDistance: 1
   rootPlatforms: {fileID: 1701026959}
   platformPrefabs:
