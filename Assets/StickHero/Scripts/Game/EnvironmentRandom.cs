@@ -14,12 +14,7 @@ namespace StickHero.Scripts.Game
         [SerializeField] private Vector2 stepMaxMinY = new(1,0.5f);
         
         [SerializeField] private Sprite[] sprites;
-
-        private void Awake()
-        {
-           // CreateItems();
-        }
-
+        
         [Button]
         public void CreateItems()
         {
@@ -28,7 +23,7 @@ namespace StickHero.Scripts.Game
             float lastX = 0;
             
             var randomSprites = new List<Sprite>(sprites);
-            Shuffle(randomSprites);
+            ShuffleList(randomSprites);
             
             for (int i = 0; i < maxCount; i++)
             {
@@ -44,14 +39,14 @@ namespace StickHero.Scripts.Game
 
                 if (i % sprites.Length == 0)
                 {
-                    Shuffle(randomSprites);
+                    ShuffleList(randomSprites);
                 }
                 
                 lastX = x;
             }
         }
         
-        private void Shuffle<T>(List<T> list)
+        private void ShuffleList<T>(List<T> list)
         {
             for (var i = 0; i < list.Count - 1; i++)
             {

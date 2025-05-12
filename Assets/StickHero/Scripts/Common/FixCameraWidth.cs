@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace StickHero.Scripts.Game
+namespace StickHero.Scripts.Common
 {
     [ExecuteAlways]
     public class FixCameraWidth : MonoBehaviour

@@ -1,7 +1,7 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 
-namespace CoffeeShopGame.Scripts.Common.Extensions
+namespace StickHero.Scripts.Common.Extensions
 {
     public static class UniTaskExtensions
     {

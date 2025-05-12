@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace CoffeeShopGame.Scripts.Common.Extensions
+namespace StickHero.Scripts.Common.Extensions
 {
     public static class GameObjectsExtensions 
     {

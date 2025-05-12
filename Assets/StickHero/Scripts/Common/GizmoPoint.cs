@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace CoffeeShopGame.Scripts.Common.Ui
+namespace StickHero.Scripts.Common
 {
     public class GizmoPoint : MonoBehaviour
     {

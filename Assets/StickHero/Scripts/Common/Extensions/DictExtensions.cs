@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
 
-namespace CoffeeShopGame.Scripts.Common.Extensions
+namespace StickHero.Scripts.Common.Extensions
 {
     public static class DictExtensions
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CoffeeShopGame.Scripts.Common.Extensions
+namespace StickHero.Scripts.Common.Extensions
 {
     public static class EnumExtensions
     {

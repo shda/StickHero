@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace CoffeeShopGame.Scripts.Common.Ui
+namespace StickHero.Scripts.Common
 {
     public class VersionLabel : MonoBehaviour
     {
