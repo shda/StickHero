@@ -12,13 +12,12 @@ namespace StickHero.Scripts.Game
         [SerializeField] private Stick stick;
         [SerializeField] private ScoreLabel scoreLabel;
         [SerializeField] private GameOver gameOver;
-        [SerializeField] private PlatformsGenerator platformsGenerator;
         [SerializeField] private CinemachineCamera cinemachineCamera;
-       // [SerializeField] Transform cameraTransform;
-
         [SerializeField] private float heroOffsetByEdge = 1.0f;
         [SerializeField] private float movingDuration = 1.0f;
         [SerializeField] private float movingCameraDuration = 1.0f;
+        
+        [SerializeField] private Level[] levels;
         
         private bool _isGameOver;
         
@@ -52,9 +51,24 @@ namespace StickHero.Scripts.Game
             {
                 hero.SetIdle();
             };
-            var newPlatforms = platformsGenerator.CreatePlatforms();
-            _platforms = newPlatforms.ToArray();
+
+            LoadLevelObjects();
             SetHeroStart(_platforms[_currentPlatform]);
+        }
+
+        private void LoadLevelObjects()
+        {
+            foreach (var level in levels)
+            {
+                level.gameObject.SetActive(false);
+            }
+
+            var selectLevel = levels[GlobalSettings.levelIndex];
+            selectLevel.gameObject.SetActive(true);
+            selectLevel.InitLevel();
+            
+            var newPlatforms = selectLevel.PlatformsGenerator.CreatePlatforms();
+            _platforms = newPlatforms.ToArray();
         }
 
         private async void SetHeroStart(Platform platform)
@@ -125,6 +139,8 @@ namespace StickHero.Scripts.Game
             //Game over
             else
             {
+                hero.SetMoving();
+                
                 cinemachineCamera.enabled = false;
                 await hero.transform.DOMoveX(endPointMoving, movingDuration);
                 

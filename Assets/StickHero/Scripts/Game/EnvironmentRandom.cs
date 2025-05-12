@@ -17,7 +17,7 @@ namespace StickHero.Scripts.Game
 
         private void Awake()
         {
-            CreateItems();
+           // CreateItems();
         }
 
         [Button]

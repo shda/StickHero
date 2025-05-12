@@ -10,7 +10,7 @@ namespace StickHero.Scripts.Game
         [SerializeField] private Transform rootPlatforms;
         [SerializeField] private Platform[] platformPrefabs;
 
-        private readonly List<Platform> platforms = new();
+        public List<Platform> Platforms { get; private set; } = new();
 
         public List<Platform> CreatePlatforms()
         {
@@ -26,10 +26,10 @@ namespace StickHero.Scripts.Game
                 var newPlatform = InstantiatePlatform(platformPrefabs[index], i, lastPos);
                 lastPos += platformPrefabs[index].GetSize() + 10.0f;
 
-                platforms.Add(newPlatform);
+                Platforms.Add(newPlatform);
             }
 
-            return platforms;
+            return Platforms;
         }
 
         private void ClearPlatforms()
@@ -39,7 +39,7 @@ namespace StickHero.Scripts.Game
                 DestroyImmediate(platform.gameObject);
             }
 
-            platforms.Clear();
+            Platforms.Clear();
         }
 
         private int GetRandomPlatformIndex(int lastIndex, bool isFirstPlatform)
