@@ -10,19 +10,19 @@ namespace StickHero.Scripts.Game
 
         [SerializeField] private Animator animator;
 
-        public void SetIdle()
+        public void SetIdleAnimation()
         {
             animator.SetBool(fallAnimation, false);
             animator.SetBool(movingAnimation, false);
             animator.SetBool(upStickAnimation, false);
         }
 
-        public void SetMoving()
+        public void SetMovingAnimation()
         {
             animator.SetBool(movingAnimation, true);
         }
 
-        public void SetFall()
+        public void SetFallAnimation()
         {
             animator.SetBool(fallAnimation, true);
         }

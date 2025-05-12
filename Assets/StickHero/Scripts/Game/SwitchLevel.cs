@@ -7,7 +7,7 @@ namespace StickHero.Scripts.Game
     {
         public void Switch(int levelIndex)
         {
-            GlobalSettings.levelIndex = levelIndex;
+            GlobalSettings.LevelIndex = levelIndex;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }

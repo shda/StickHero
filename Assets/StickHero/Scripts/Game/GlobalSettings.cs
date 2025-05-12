@@ -2,6 +2,6 @@ namespace StickHero.Scripts.Game
 {
     public static class GlobalSettings
     {
-        public static int levelIndex { get; set; } = 0;
+        public static int LevelIndex { get; set; } = 0;
     }
 }

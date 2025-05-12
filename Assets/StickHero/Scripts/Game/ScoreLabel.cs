@@ -28,7 +28,7 @@ namespace StickHero.Scripts.Game
             scoreText.text = score.ToString();
         }
 
-        public void AddScore(int scoreAdd)
+        public void UpScore(int scoreAdd)
         {
             Score += scoreAdd;
         }

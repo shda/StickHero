@@ -11,22 +11,22 @@ namespace StickHero.Scripts.Game
         [SerializeField] private Hero hero;
         [SerializeField] private Stick stick;
         [SerializeField] private ScoreLabel scoreLabel;
-        [SerializeField] private GameOver gameOver;
+        [SerializeField] private GameOverMenu gameOverMenu;
         [SerializeField] private CinemachineCamera cinemachineCamera;
+        
         [SerializeField] private float heroOffsetByEdge = 1.0f;
-        [SerializeField] private float movingDuration = 1.0f;
-        [SerializeField] private float movingCameraDuration = 1.0f;
+        [SerializeField] private float heroMovingDuration = 1.0f;
         
         [SerializeField] private Level[] levels;
         
         private bool _isGameOver;
         
-        private int _currentPlatform;
+        private int _indexCurrentPlatform;
         private Platform[] _platforms;
 
         private void Start()
         {
-            gameOver.OnRestart = Restart;
+            gameOverMenu.OnRestart = Restart;
             StartGame();
         }
 
@@ -35,25 +35,28 @@ namespace StickHero.Scripts.Game
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        private void StartGame()
+        private async void StartGame()
         {
-            hero.SetIdle();
-            gameOver.Hide();
+            hero.SetIdleAnimation();
+            gameOverMenu.Hide();
             scoreLabel.ResetScore();
             
-            _currentPlatform = 0;
+            _indexCurrentPlatform = 0;
             stick.OnCompleteDropStick = OnCompleteDropStick;
-            stick.OnStickResize = () =>
+            stick.OnStartStickResize = () =>
             {
                 hero.SetUpStickAnimation();
             };
             stick.OnStickComplete = () =>
             {
-                hero.SetIdle();
+                hero.SetIdleAnimation();
             };
 
             LoadLevelObjects();
-            SetHeroStart(_platforms[_currentPlatform]);
+            
+            //for some reason the platforms don't have time to be created without delay
+            await UniTask.DelayFrame(3);
+            SetHeroToEndPlatform(_platforms[_indexCurrentPlatform]);
         }
 
         private void LoadLevelObjects()
@@ -63,18 +66,16 @@ namespace StickHero.Scripts.Game
                 level.gameObject.SetActive(false);
             }
 
-            var selectLevel = levels[GlobalSettings.levelIndex];
+            var selectLevel = levels[GlobalSettings.LevelIndex];
             selectLevel.gameObject.SetActive(true);
             selectLevel.InitLevel();
             
-            var newPlatforms = selectLevel.PlatformsGenerator.CreatePlatforms();
-            _platforms = newPlatforms.ToArray();
+            var createdPlatforms = selectLevel.PlatformsGenerator.CreatePlatforms();
+            _platforms = createdPlatforms.ToArray();
         }
 
-        private async void SetHeroStart(Platform platform)
+        private void SetHeroToEndPlatform(Platform platform)
         {
-            await UniTask.DelayFrame(3);
-            
             var edgePoint = platform.GetTopRightPosition();
             hero.transform.position = new Vector3(edgePoint.x - heroOffsetByEdge, 
                 hero.transform.position.y, hero.transform.position.z);
@@ -84,81 +85,73 @@ namespace StickHero.Scripts.Game
             stick.ResetStick();
         }
 
-        private void OnCompleteDropStick(float distance)
+        private void OnCompleteDropStick(float stickLength)
         {
-            var startPointMoving = _platforms[_currentPlatform].GetTopRightPosition();
-            var endPointMoving = startPointMoving.x + distance;
+            var startPointMoving = _platforms[_indexCurrentPlatform].GetTopRightPosition();
+            var endOfStickX = startPointMoving.x + stickLength;
 
-            var targetMovePlatform = FindStickPlatform(endPointMoving);
-            if (targetMovePlatform != null)
+            var targetMovePlatform = FindNearestPlatform(endOfStickX);
+            if (targetMovePlatform)
             {
-                scoreLabel.AddScore((int)distance);
+                scoreLabel.UpScore((int)stickLength);
             }
-            HeroMovingToPlatform(endPointMoving , targetMovePlatform);
+            HeroMoveOnStickAsync(endOfStickX , targetMovePlatform);
         }
 
-        private Platform FindStickPlatform(float endPointMoving)
+        private Platform FindNearestPlatform(float endOfStickX)
         {
-            Platform nextPlatform = null;
-            var offsetNextPlatform = 0;
-            for (int i = 0; i < 5; i++)
+            Platform findNextPlatform = null;
+            var findPlatformIndex = 0;
+
+            var maxCheckPlatforms = 5;
+            for (int i = 0; i < maxCheckPlatforms; i++)
             {
-                if(_currentPlatform + i >= _platforms.Length)
+                if(_indexCurrentPlatform + i >= _platforms.Length)
                     break;
                 
-                var platform = _platforms[_currentPlatform + i];
-                var leftPoint = platform.GetTopLeftPosition();
-                var rightPoint = platform.GetTopRightPosition();
+                var platform = _platforms[_indexCurrentPlatform + i];
+                var topLeftPosition = platform.GetTopLeftPosition();
+                var topRightPosition = platform.GetTopRightPosition();
 
-                if (endPointMoving > leftPoint.x && 
-                    endPointMoving < rightPoint.x)
+                if (endOfStickX > topLeftPosition.x && 
+                    endOfStickX < topRightPosition.x)
                 {
-                    Debug.Log("Ok");
-                    nextPlatform = platform;
-                    offsetNextPlatform = i;
+                    findNextPlatform = platform;
+                    findPlatformIndex = i;
                     break;
                 }
             }
             
-            _currentPlatform += offsetNextPlatform;
-            return nextPlatform;
+            _indexCurrentPlatform += findPlatformIndex;
+            return findNextPlatform;
         }
 
-        private async void HeroMovingToPlatform(float endPointMoving , Platform platform)
+        private async void HeroMoveOnStickAsync(float endPointMoving , Platform platform)
         {
             if (platform != null)
             {
-                hero.SetMoving();
+                hero.SetMovingAnimation();
                 
-                var nextPoint = platform.GetTopRightPosition();
-                await hero.transform.DOMoveX(nextPoint.x - heroOffsetByEdge, movingDuration);
-                await MovingCameraToPlatform(platform);
+                var positionMove = platform.GetTopRightPosition();
+                await hero.transform.DOMoveX(positionMove.x - heroOffsetByEdge, heroMovingDuration);
                 
-                SetHeroStart(platform);
+                SetHeroToEndPlatform(platform);
             }
             //Game over
             else
             {
-                hero.SetMoving();
+                hero.SetMovingAnimation();
                 
                 cinemachineCamera.enabled = false;
-                await hero.transform.DOMoveX(endPointMoving, movingDuration);
+                await hero.transform.DOMoveX(endPointMoving, heroMovingDuration);
                 
-                hero.SetFall();
-                await hero.transform.DOMoveY( hero.transform.position.y - 10.0f, movingDuration);
+                hero.SetFallAnimation();
+                await hero.transform.DOMoveY( hero.transform.position.y - 10.0f, heroMovingDuration);
                 
-                gameOver.Show();
+                gameOverMenu.Show();
             }
             
-            hero.SetIdle();
-        }
-
-        private async UniTask MovingCameraToPlatform(Platform platform)
-        {
-            /*
-            var pointMoving = platform.GetTopLeftPosition();
-            await cameraTransform.transform.DOMoveX(pointMoving.x, movingDuration);
-            */
+            hero.SetIdleAnimation();
         }
     }
 }
