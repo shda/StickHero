@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace StickHero.Scripts.Game
 {
-    public class GameOverMenu : MonoBehaviour
+    public class GameOverScreen : MonoBehaviour
     {
         public Action OnRestart;
         public void OnPressRestart()

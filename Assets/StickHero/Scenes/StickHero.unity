@@ -1497,7 +1497,7 @@ GameObject:
   - component: {fileID: 909252918}
   - component: {fileID: 909252917}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Ui
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1772,7 +1772,7 @@ GameObject:
   - component: {fileID: 964818812}
   - component: {fileID: 964818811}
   m_Layer: 5
-  m_Name: GameOverMenu
+  m_Name: GameOverScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1859,7 +1859,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1021088642}
   - component: {fileID: 1021088643}
-  - component: {fileID: 1021088644}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -1901,10 +1900,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62e577df7024fb9bbe746ad365023dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hero: {fileID: 925983696}
+  heroAnimations: {fileID: 925983696}
   stick: {fileID: 37391717}
-  scoreLabel: {fileID: 1021088644}
-  gameOverMenu: {fileID: 964818811}
+  scoreLabel: {fileID: 2094691577}
+  gameOverScreen: {fileID: 964818811}
   cinemachineCamera: {fileID: 1228785077}
   heroOffsetByEdge: 0.9
   heroMovingDuration: 1
@@ -1912,19 +1911,6 @@ MonoBehaviour:
   - {fileID: 1082113612}
   - {fileID: 296930362}
   - {fileID: 2116787953}
---- !u!114 &1021088644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1021088641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 799cd6db72934b1e90d9cef69ff04acc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreText: {fileID: 2094691575}
 --- !u!1 &1064603819
 GameObject:
   m_ObjectHideFlags: 0
@@ -8922,6 +8908,7 @@ GameObject:
   - component: {fileID: 2094691576}
   - component: {fileID: 2094691575}
   - component: {fileID: 2094691574}
+  - component: {fileID: 2094691577}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -9063,6 +9050,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094691572}
   m_CullTransparentMesh: 1
+--- !u!114 &2094691577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094691572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 799cd6db72934b1e90d9cef69ff04acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 2094691575}
 --- !u!1 &2116787952
 GameObject:
   m_ObjectHideFlags: 0

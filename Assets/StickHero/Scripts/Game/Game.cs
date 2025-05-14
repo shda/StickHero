@@ -8,10 +8,10 @@ namespace StickHero.Scripts.Game
 {
     public class Game : MonoBehaviour
     {
-        [SerializeField] private Hero hero;
+        [SerializeField] private HeroAnimations heroAnimations;
         [SerializeField] private Stick stick;
         [SerializeField] private ScoreLabel scoreLabel;
-        [SerializeField] private GameOverMenu gameOverMenu;
+        [SerializeField] private GameOverScreen gameOverScreen;
         [SerializeField] private CinemachineCamera cinemachineCamera;
         
         [SerializeField] private float heroOffsetByEdge = 1.0f;
@@ -26,7 +26,7 @@ namespace StickHero.Scripts.Game
 
         private void Start()
         {
-            gameOverMenu.OnRestart = Restart;
+            gameOverScreen.OnRestart = Restart;
             StartGame();
         }
 
@@ -37,26 +37,26 @@ namespace StickHero.Scripts.Game
 
         private async void StartGame()
         {
-            hero.SetIdleAnimation();
-            gameOverMenu.Hide();
+            heroAnimations.SetIdleAnimation();
+            gameOverScreen.Hide();
             scoreLabel.ResetScore();
             
             _indexCurrentPlatform = 0;
             stick.OnCompleteDropStick = OnCompleteDropStick;
             stick.OnStartStickResize = () =>
             {
-                hero.SetUpStickAnimation();
+                heroAnimations.SetUpStickAnimation();
             };
             stick.OnStickComplete = () =>
             {
-                hero.SetIdleAnimation();
+                heroAnimations.SetIdleAnimation();
             };
 
             LoadLevelObjects();
             
             //for some reason the platforms don't have time to be created without delay
             await UniTask.DelayFrame(3);
-            SetHeroToEndPlatform(_platforms[_indexCurrentPlatform]);
+            SetHeroToEndEdgeOnPlatform(_platforms[_indexCurrentPlatform]);
         }
 
         private void LoadLevelObjects()
@@ -74,11 +74,11 @@ namespace StickHero.Scripts.Game
             _platforms = createdPlatforms.ToArray();
         }
 
-        private void SetHeroToEndPlatform(Platform platform)
+        private void SetHeroToEndEdgeOnPlatform(Platform platform)
         {
             var edgePoint = platform.GetTopRightPosition();
-            hero.transform.position = new Vector3(edgePoint.x - heroOffsetByEdge, 
-                hero.transform.position.y, hero.transform.position.z);
+            heroAnimations.transform.position = new Vector3(edgePoint.x - heroOffsetByEdge, 
+                heroAnimations.transform.position.y, heroAnimations.transform.position.z);
             stick.transform.position = new Vector3(edgePoint.x, 
                 stick.transform.position.y, stick.transform.position.z);
             
@@ -130,28 +130,28 @@ namespace StickHero.Scripts.Game
         {
             if (platform != null)
             {
-                hero.SetMovingAnimation();
+                heroAnimations.SetMovingAnimation();
                 
                 var positionMove = platform.GetTopRightPosition();
-                await hero.transform.DOMoveX(positionMove.x - heroOffsetByEdge, heroMovingDuration);
+                await heroAnimations.transform.DOMoveX(positionMove.x - heroOffsetByEdge, heroMovingDuration);
                 
-                SetHeroToEndPlatform(platform);
+                SetHeroToEndEdgeOnPlatform(platform);
             }
             //Game over
             else
             {
-                hero.SetMovingAnimation();
+                heroAnimations.SetMovingAnimation();
                 
                 cinemachineCamera.enabled = false;
-                await hero.transform.DOMoveX(endPointMoving, heroMovingDuration);
+                await heroAnimations.transform.DOMoveX(endPointMoving, heroMovingDuration);
                 
-                hero.SetFallAnimation();
-                await hero.transform.DOMoveY( hero.transform.position.y - 10.0f, heroMovingDuration);
+                heroAnimations.SetFallAnimation();
+                await heroAnimations.transform.DOMoveY( heroAnimations.transform.position.y - 10.0f, heroMovingDuration);
                 
-                gameOverMenu.Show();
+                gameOverScreen.Show();
             }
             
-            hero.SetIdleAnimation();
+            heroAnimations.SetIdleAnimation();
         }
     }
 }

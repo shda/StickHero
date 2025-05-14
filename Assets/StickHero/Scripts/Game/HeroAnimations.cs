@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace StickHero.Scripts.Game
 {
-    public class Hero : MonoBehaviour
+    public class HeroAnimations : MonoBehaviour
     {
         private readonly int upStickAnimation = Animator.StringToHash("UpStick");
         private readonly int movingAnimation = Animator.StringToHash("Moving");
