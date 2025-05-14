@@ -82,7 +82,7 @@ namespace StickHero.Scripts.Game
             stick.transform.position = new Vector3(edgePoint.x, 
                 stick.transform.position.y, stick.transform.position.z);
             
-            stick.ResetStick();
+            stick.ResetStickStage();
         }
 
         private void OnCompleteDropStick(float stickLength)

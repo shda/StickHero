@@ -1,6 +1,6 @@
 namespace StickHero.Scripts.Game
 {
-    public enum StickStage
+    public enum StickAnimationStage
     {
         None,
         Resize,

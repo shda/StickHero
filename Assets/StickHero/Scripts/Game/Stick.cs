@@ -19,27 +19,27 @@ namespace StickHero.Scripts.Game
         public Action OnStartStickResize;
         public Action OnStickComplete;
         
-        private StickStage _stickStage = StickStage.None;
+        private StickAnimationStage _stickAnimationStage = StickAnimationStage.None;
         private float _currentTimeStickRotation;
         
         private void Update()
         {
-            switch (_stickStage)
+            switch (_stickAnimationStage)
             {
-                case StickStage.None:
+                case StickAnimationStage.None:
                     _currentTimeStickRotation = 0;
                     transform.rotation = Quaternion.identity;
                     stickRenderer.size = new Vector2(stickRenderer.size.x, minStickSize);
-                    if (IsStartSize())
+                    if (IsStartChangeStickResize())
                     {
-                        _stickStage = StickStage.Resize;
+                        _stickAnimationStage = StickAnimationStage.Resize;
                         OnStartStickResize?.Invoke();
                     }
                     break;
-                case StickStage.Resize:
-                    if (IsStopSize())
+                case StickAnimationStage.Resize:
+                    if (IsStopChangeStickResize())
                     {
-                        _stickStage = StickStage.Rotate;
+                        _stickAnimationStage = StickAnimationStage.Rotate;
                         OnStickComplete?.Invoke();
                         return;
                     }
@@ -47,34 +47,34 @@ namespace StickHero.Scripts.Game
                     stickRenderer.size = new Vector2(stickRenderer.size.x, Math.Clamp(newSize , minStickSize, maxStickSize));
                    
                     break;
-                case StickStage.Rotate:
+                case StickAnimationStage.Rotate:
                     _currentTimeStickRotation += Time.deltaTime;
                     var t = _currentTimeStickRotation / durationToRotation;
                     transform.rotation = Quaternion.Slerp(Quaternion.identity, Quaternion.Euler(0,0,-90), t);
                     if (_currentTimeStickRotation > durationToRotation)
                     {
-                        _stickStage = StickStage.Complete;
+                        _stickAnimationStage = StickAnimationStage.Complete;
                         
                     }
                     break;
-                case StickStage.Complete:
+                case StickAnimationStage.Complete:
                     OnCompleteDropStick?.Invoke(stickRenderer.size.y);
-                    _stickStage = StickStage.End;
+                    _stickAnimationStage = StickAnimationStage.End;
                     break;
-                case StickStage.End:
+                case StickAnimationStage.End:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        public void ResetStick()
+        public void ResetStickStage()
         {
-            _stickStage = StickStage.None;
+            _stickAnimationStage = StickAnimationStage.None;
             Update();
         }
 
-        private bool IsStartSize()
+        private bool IsStartChangeStickResize()
         {
             if (EventSystem.current.IsPointerOverGameObject())
                 return false;
@@ -82,7 +82,7 @@ namespace StickHero.Scripts.Game
             return Input.GetMouseButtonDown(0);
         }
 
-        private bool IsStopSize()
+        private bool IsStopChangeStickResize()
         {
             return Input.GetMouseButtonUp(0);
         }
